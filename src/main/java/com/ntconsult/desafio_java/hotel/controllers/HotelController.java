@@ -13,22 +13,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
-@RestController
+@RestController("/api/hoteis")
 public class HotelController {
 
     private final HotelService hotelService;
     
     private final HotelComparisonService hotelComparisonService;
 
-    @GetMapping("/api/hoteis")
-
+    @GetMapping
     public ResponseEntity<List<Hotel>> listarHoteis() {
         List<Hotel> hoteis = hotelService.listarHoteis();
 
         return ResponseEntity.ok(hoteis);
     }
 
-    @GetMapping("/api/hoteis/pesquisar")
+    @GetMapping("/pesquisar")
     public ResponseEntity<List<Hotel>> pesquisarHoteis(
             @RequestParam(required = false) String localizacao,
             @RequestParam(required = false) LocalDate dataCheckin,
@@ -40,7 +39,7 @@ public class HotelController {
         return ResponseEntity.ok(hoteis);
     }
 
-    @GetMapping("/api/hoteis/comparar/preco")
+    @GetMapping("/comparar/preco")
     public ResponseEntity<List<Hotel>> compararHoteisPorPreco(
             @RequestParam(required = false) String localizacao,
             @RequestParam(required = false) LocalDate dataCheckin,
@@ -53,7 +52,7 @@ public class HotelController {
         return ResponseEntity.ok(hoteisComparados);
     }
 
-    @GetMapping("/api/hoteis/comparar/avaliacao")
+    @GetMapping("/comparar/avaliacao")
     public ResponseEntity<List<Hotel>> compararHoteisPorAvaliacao(
             @RequestParam(required = false) String localizacao,
             @RequestParam(required = false) LocalDate dataCheckin,
@@ -66,7 +65,7 @@ public class HotelController {
         return ResponseEntity.ok(hoteisComparados);
     }
 
-    @GetMapping("/api/hoteis/comparar/localizacao")
+    @GetMapping("/comparar/localizacao")
     public ResponseEntity<List<Hotel>> compararHoteisPorLocalizacao(
             @RequestParam(required = true) String localizacao) {
 
@@ -75,7 +74,7 @@ public class HotelController {
         return ResponseEntity.ok(hoteisComparados);
     }
 
-    @GetMapping("/api/hoteis/comparar/comodidades")
+    @GetMapping("/comparar/comodidades")
     public ResponseEntity<List<Hotel>> compararHoteisPorComodidades(
             @RequestParam(required = true) List<String> comodidades) {
 
