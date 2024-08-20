@@ -43,4 +43,26 @@ public class ReservaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/{id}/checkin")
+    public ResponseEntity<Void> processarCheckin(@PathVariable Long id) {
+        boolean checkinProcessado = reservaService.processarCheckin(id);
+
+        if (checkinProcessado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<Void> processarCheckout(@PathVariable Long id) {
+        boolean checkoutProcessado = reservaService.processarCheckout(id);
+
+        if (checkoutProcessado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

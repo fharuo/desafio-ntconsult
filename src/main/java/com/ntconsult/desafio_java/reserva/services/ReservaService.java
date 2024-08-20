@@ -1,5 +1,6 @@
 package com.ntconsult.desafio_java.reserva.services;
 
+import com.ntconsult.desafio_java.notificacao.services.NotificacaoService;
 import com.ntconsult.desafio_java.quarto.repositories.QuartoRepository;
 import com.ntconsult.desafio_java.reserva.dtos.ReservaRequestDTO;
 import com.ntconsult.desafio_java.reserva.models.Reserva;
@@ -9,18 +10,19 @@ import com.ntconsult.desafio_java.reserva.repositories.StatusReservaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class ReservaService {
 
-    private ReservaRepository reservaRepository;
+    private final ReservaRepository reservaRepository;
 
-    private QuartoRepository quartoRepository;
+    private final QuartoRepository quartoRepository;
 
-    private StatusReservaRepository statusReservaRepository;
+    private final StatusReservaRepository statusReservaRepository;
+
+    private final NotificacaoService notificacaoService;
 
     public Optional<Reserva> criarReserva(ReservaRequestDTO dto) {
         boolean disponivel = quartoRepository.isQuartoDisponivel(dto.getQuartoId(), dto.getDataCheckin(), dto.getDataCheckout());
@@ -37,7 +39,11 @@ public class ReservaService {
             StatusReserva statusConfirmado = statusReservaRepository.findByDescricao("CONFIRMADA").orElseThrow(() -> new IllegalArgumentException("Status de reserva não encontrado"));
             reserva.setStatus(statusConfirmado);
 
-            return Optional.of(reservaRepository.save(reserva));
+            Reserva reservaConfirmada = reservaRepository.save(reserva);
+
+            notificacaoService.enviarNotificacao(reservaConfirmada, "CONFIRMACAO_RESERVA");
+
+            return Optional.of(reservaConfirmada);
         } else {
             return Optional.empty();
         }
@@ -53,6 +59,43 @@ public class ReservaService {
 
             reserva.setStatus(statusCancelada);
             reservaRepository.save(reserva);
+            notificacaoService.enviarNotificacao(reserva, "CANCELAMENTO_RESERVA");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean processarCheckin(Long reservaId) {
+        Optional<Reserva> reservaOptional = reservaRepository.findById(reservaId);
+
+        if (reservaOptional.isPresent()) {
+            Reserva reserva = reservaOptional.get();
+            StatusReserva statusCheckin = statusReservaRepository.findByDescricao("CHECKED_IN")
+                    .orElseThrow(() -> new IllegalArgumentException("Status de reserva 'CHECKED_IN' não encontrado"));
+
+            reserva.setStatus(statusCheckin);
+            reservaRepository.save(reserva);
+
+            notificacaoService.enviarNotificacao(reserva, "CHECKIN_REALIZADO");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean processarCheckout(Long reservaId) {
+        Optional<Reserva> reservaOptional = reservaRepository.findById(reservaId);
+
+        if (reservaOptional.isPresent()) {
+            Reserva reserva = reservaOptional.get();
+            StatusReserva statusCheckout = statusReservaRepository.findByDescricao("CHECKED_OUT")
+                    .orElseThrow(() -> new IllegalArgumentException("Status de reserva 'CHECKED_OUT' não encontrado"));
+
+            reserva.setStatus(statusCheckout);
+            reservaRepository.save(reserva);
+
+            notificacaoService.enviarNotificacao(reserva, "CHECKOUT_REALIZADO");
             return true;
         } else {
             return false;
