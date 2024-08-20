@@ -22,6 +22,8 @@ public class Hotel {
     private BigDecimal precoNoite;
 
     @ElementCollection
+    @CollectionTable(name = "hotel_comodidades", joinColumns = @JoinColumn(name = "hotel_id"))
+    @Column(name = "comodidade")
     private List<String> comodidades;
 
     private Double avaliacaoMedia;

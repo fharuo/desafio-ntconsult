@@ -14,6 +14,10 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
 
+    public List<Hotel> listarHoteis() {
+        return hotelRepository.findAll();
+    }
+
     public List<Hotel> pesquisarHoteis(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes) {
         return hotelRepository.findByCriteria(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
     }

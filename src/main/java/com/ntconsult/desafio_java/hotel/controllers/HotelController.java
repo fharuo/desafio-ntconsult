@@ -21,6 +21,14 @@ public class HotelController {
     private final HotelComparisonService hotelComparisonService;
 
     @GetMapping("/api/hoteis")
+
+    public ResponseEntity<List<Hotel>> listarHoteis() {
+        List<Hotel> hoteis = hotelService.listarHoteis();
+
+        return ResponseEntity.ok(hoteis);
+    }
+
+    @GetMapping("/api/hoteis/pesquisar")
     public ResponseEntity<List<Hotel>> pesquisarHoteis(
             @RequestParam(required = false) String localizacao,
             @RequestParam(required = false) LocalDate dataCheckin,
