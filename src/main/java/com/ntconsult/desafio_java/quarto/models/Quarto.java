@@ -20,12 +20,10 @@ public class Quarto {
 
     private Boolean disponivel = true;
 
+    private Integer capacidade;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_id", nullable = false)
-    private TipoQuarto tipo;
 
 }

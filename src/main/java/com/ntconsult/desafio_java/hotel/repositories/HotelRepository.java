@@ -13,10 +13,16 @@ import java.util.List;
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
     List<Hotel> findByLocalizacaoAndPrecoNoiteBetween(String localizacao, BigDecimal precoMin, BigDecimal precoMax);
 
-    @Query("SELECT h FROM Hotel h WHERE " +
-            "(:localizacao IS NULL OR h.localizacao LIKE %:localizacao%) AND " +
-            "(:dataCheckin IS NULL OR h.id NOT IN (SELECT r.hotel.id FROM Reserva r WHERE :dataCheckin BETWEEN r.dataCheckin AND r.dataCheckout OR :dataCheckout BETWEEN r.dataCheckin AND r.dataCheckout)) AND " +
-            "(:numeroQuartos IS NULL OR :numeroHospedes IS NULL OR h.id IN (SELECT q.hotel.id FROM Quarto q WHERE q.disponivel = true))")
+    @Query(value = "SELECT h.* FROM hotel h " +
+            "JOIN quarto q ON h.id = q.hotel_id " +
+            "LEFT JOIN reserva r ON q.id = r.quarto_id " +
+            "AND (r.data_checkin <= :dataCheckout AND r.data_checkout >= :dataCheckin) " +
+            "WHERE h.localizacao LIKE %:localizacao% " +
+            "AND q.disponivel = true " +
+            "AND q.capacidade >= :numeroHospedes " +
+            "AND r.id IS NULL " +
+            "GROUP BY h.id " +
+            "HAVING COUNT(q.id) >= :numeroQuartos", nativeQuery = true)
     List<Hotel> findByCriteria(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes);
 
 }

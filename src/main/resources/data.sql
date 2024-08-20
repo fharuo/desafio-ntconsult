@@ -30,14 +30,9 @@ INSERT INTO hotel_comodidades (hotel_id, comodidade) VALUES
 (3, 'Vista para o mar'),
 (3, 'Ar-condicionado');
 
-INSERT INTO tipo_quarto (id, descricao) VALUES
-(1, 'Single'),
-(2, 'Double'),
-(3, 'Suite');
-
-INSERT INTO quarto (id, hotel_id, numero, tipo_id, preco_noite, disponivel) VALUES
-(1, 1, '101', 1, 500.00, TRUE),
-(2, 1, '102', 2, 600.00, TRUE),
-(3, 2, '201', 1, 200.00, TRUE),
-(4, 2, '202', 2, 250.00, TRUE),
-(5, 3, '301', 3, 700.00, TRUE);
+INSERT INTO quarto (id, hotel_id, numero, preco_noite, capacidade, disponivel) VALUES
+(1, 1, '101', 500.00, 2,TRUE),
+(2, 1, '102', 600.00, 3,TRUE),
+(3, 2, '201', 200.00, 2,TRUE),
+(4, 2, '202', 250.00, 3,TRUE),
+(5, 3, '301', 700.00, 5,TRUE);
