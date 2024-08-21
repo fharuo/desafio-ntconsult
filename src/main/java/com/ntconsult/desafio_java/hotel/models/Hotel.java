@@ -1,13 +1,18 @@
 package com.ntconsult.desafio_java.hotel.models;
 
+import com.ntconsult.desafio_java.quarto.models.Quarto;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Hotel {
 
     @Id
@@ -26,5 +31,8 @@ public class Hotel {
     private Double avaliacaoMedia;
 
     private Integer numeroAvaliacoes;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private List<Quarto> quartos = new ArrayList<>();
 
 }

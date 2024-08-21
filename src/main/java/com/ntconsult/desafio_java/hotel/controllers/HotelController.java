@@ -1,5 +1,8 @@
 package com.ntconsult.desafio_java.hotel.controllers;
 
+import com.ntconsult.desafio_java.hotel.dtos.ComparacaoDTO;
+import com.ntconsult.desafio_java.hotel.dtos.ComparacaoPrecoDTO;
+import com.ntconsult.desafio_java.hotel.dtos.HotelDTO;
 import com.ntconsult.desafio_java.hotel.models.Hotel;
 import com.ntconsult.desafio_java.hotel.services.HotelComparisonService;
 import com.ntconsult.desafio_java.hotel.services.HotelService;
@@ -23,8 +26,8 @@ public class HotelController {
     private final HotelComparisonService hotelComparisonService;
 
     @GetMapping
-    public ResponseEntity<List<Hotel>> listarHoteis() {
-        List<Hotel> hoteis = hotelService.listarHoteis();
+    public ResponseEntity<List<HotelDTO>> listarHoteis() {
+        List<HotelDTO> hoteis = hotelService.listarHoteis();
 
         return ResponseEntity.ok(hoteis);
     }
@@ -42,33 +45,42 @@ public class HotelController {
     }
 
     @GetMapping("/comparar/avaliacao")
-    public ResponseEntity<List<Hotel>> compararHoteisPorAvaliacao(
-            @RequestParam(required = false) String localizacao,
-            @RequestParam(required = false) LocalDate dataCheckin,
-            @RequestParam(required = false) LocalDate dataCheckout,
-            @RequestParam(required = false) Integer numeroQuartos,
-            @RequestParam(required = false) Integer numeroHospedes) {
+    public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorAvaliacao(
+            @RequestParam(required = false) Long primeiroHotelId,
+            @RequestParam(required = false) Long segundoHotelId) {
 
-        List<Hotel> hoteis = hotelService.pesquisarHoteis(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
-        List<Hotel> hoteisComparados = hotelComparisonService.compararHoteisPorAvaliacao(hoteis);
+        List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorAvaliacao(primeiroHotelId, segundoHotelId);
+
         return ResponseEntity.ok(hoteisComparados);
     }
 
     @GetMapping("/comparar/localizacao")
-    public ResponseEntity<List<Hotel>> compararHoteisPorLocalizacao(
-            @RequestParam(required = true) String localizacao) {
+    public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorLocalizacao(
+            @RequestParam(required = false) Long primeiroHotelId,
+            @RequestParam(required = false) Long segundoHotelId) {
 
-        List<Hotel> hoteis = hotelService.pesquisarHoteis(localizacao, null, null, 0, 0);
-        List<Hotel> hoteisComparados = hotelComparisonService.compararHoteisPorLocalizacao(hoteis, localizacao);
+        List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorLocalizacao(primeiroHotelId, segundoHotelId);
+
         return ResponseEntity.ok(hoteisComparados);
     }
 
     @GetMapping("/comparar/comodidades")
-    public ResponseEntity<List<Hotel>> compararHoteisPorComodidades(
-            @RequestParam(required = true) List<String> comodidades) {
+    public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorComodidades(
+            @RequestParam(required = false) Long primeiroHotelId,
+            @RequestParam(required = false) Long segundoHotelId) {
 
-        List<Hotel> hoteis = hotelService.pesquisarHoteis(null, null, null, 0, 0);
-        List<Hotel> hoteisComparados = hotelComparisonService.compararHoteisPorComodidades(hoteis, comodidades);
+        List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorComodidades(primeiroHotelId, segundoHotelId);
+
+        return ResponseEntity.ok(hoteisComparados);
+    }
+
+    @GetMapping("/comparar/preco")
+    public ResponseEntity<List<ComparacaoPrecoDTO>> compararHoteisPorPreco(
+            @RequestParam(required = false) Long primeiroHotelId,
+            @RequestParam(required = false) Long segundoHotelId) {
+
+        List<ComparacaoPrecoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorPreco(primeiroHotelId, segundoHotelId);
+
         return ResponseEntity.ok(hoteisComparados);
     }
 }

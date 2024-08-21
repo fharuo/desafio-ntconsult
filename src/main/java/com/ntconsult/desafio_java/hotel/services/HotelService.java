@@ -1,5 +1,6 @@
 package com.ntconsult.desafio_java.hotel.services;
 
+import com.ntconsult.desafio_java.hotel.dtos.HotelDTO;
 import com.ntconsult.desafio_java.hotel.models.Hotel;
 import com.ntconsult.desafio_java.hotel.repositories.HotelRepository;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,10 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
 
-    public List<Hotel> listarHoteis() {
-        return hotelRepository.findAll();
+    public List<HotelDTO> listarHoteis() {
+        List<Hotel> hoteis = hotelRepository.findAll();
+
+        return hoteis.stream().map(HotelDTO::new).toList();
     }
 
     public List<Hotel> pesquisarHoteis(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes) {
