@@ -3,7 +3,6 @@ package com.ntconsult.desafio_java.hotel.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 

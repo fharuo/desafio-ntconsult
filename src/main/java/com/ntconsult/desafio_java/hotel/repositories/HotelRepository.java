@@ -5,13 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
-    List<Hotel> findByLocalizacaoAndPrecoNoiteBetween(String localizacao, BigDecimal precoMin, BigDecimal precoMax);
 
     @Query(value = "SELECT h.* FROM hotel h " +
             "JOIN quarto q ON h.id = q.hotel_id " +
