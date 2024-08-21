@@ -15,10 +15,10 @@ INSERT INTO tipo_notificacao (id, descricao) VALUES
 (3, 'CHECKIN_REALIZADO'),
 (4, 'CHECKOUT_REALIZADO');
 
-INSERT INTO hotel (id, nome, localizacao, preco_noite, avaliacao_media, numero_avaliacoes) VALUES
-(1, 'Hotel Luxo', 'Avenida Paulista, São Paulo', 500.00, 4.5, 150),
-(2, 'Hotel Simples', 'Centro, Rio de Janeiro', 200.00, 3.8, 75),
-(3, 'Hotel Conforto', 'Copacabana, Rio de Janeiro', 350.00, 4.2, 90);
+INSERT INTO hotel (id, nome, localizacao, avaliacao_media, numero_avaliacoes) VALUES
+(1, 'Hotel Luxo', 'Avenida Paulista, São Paulo', 4.5, 150),
+(2, 'Hotel Simples', 'Centro, Rio de Janeiro', 3.8, 75),
+(3, 'Hotel Conforto', 'Copacabana, Rio de Janeiro', 4.2, 90);
 
 INSERT INTO hotel_comodidades (hotel_id, comodidade) VALUES
 (1, 'Wi-Fi gratuito'),

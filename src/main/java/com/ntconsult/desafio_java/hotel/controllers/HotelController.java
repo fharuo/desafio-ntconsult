@@ -41,19 +41,6 @@ public class HotelController {
         return ResponseEntity.ok(hoteis);
     }
 
-    @GetMapping("/comparar/preco")
-    public ResponseEntity<List<Hotel>> compararHoteisPorPreco(
-            @RequestParam(required = false) String localizacao,
-            @RequestParam(required = false) LocalDate dataCheckin,
-            @RequestParam(required = false) LocalDate dataCheckout,
-            @RequestParam(required = false) Integer numeroQuartos,
-            @RequestParam(required = false) Integer numeroHospedes) {
-
-        List<Hotel> hoteis = hotelService.pesquisarHoteis(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
-        List<Hotel> hoteisComparados = hotelComparisonService.compararHoteisPorPreco(hoteis);
-        return ResponseEntity.ok(hoteisComparados);
-    }
-
     @GetMapping("/comparar/avaliacao")
     public ResponseEntity<List<Hotel>> compararHoteisPorAvaliacao(
             @RequestParam(required = false) String localizacao,

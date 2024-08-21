@@ -19,8 +19,6 @@ public class Hotel {
 
     private String localizacao;
 
-    private BigDecimal precoNoite;
-
     @ElementCollection
     @CollectionTable(name = "hotel_comodidades", joinColumns = @JoinColumn(name = "hotel_id"))
     @Column(name = "comodidade")

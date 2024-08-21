@@ -10,12 +10,6 @@ import java.util.stream.Collectors;
 @Service
 public class HotelComparisonService {
 
-    public List<Hotel> compararHoteisPorPreco(List<Hotel> hoteis) {
-        return hoteis.stream()
-                .sorted(Comparator.comparing(Hotel::getPrecoNoite))
-                .collect(Collectors.toList());
-    }
-
     public List<Hotel> compararHoteisPorAvaliacao(List<Hotel> hoteis) {
         return hoteis.stream()
                 .sorted(Comparator.comparing(Hotel::getAvaliacaoMedia).reversed())
