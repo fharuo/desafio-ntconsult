@@ -7,6 +7,8 @@ import java.time.LocalDate;
 @Data
 public class ReservaRequestDTO {
 
+    private Long hotelId;
+
     private Long quartoId;
 
     private LocalDate dataCheckin;

@@ -2,7 +2,6 @@ package com.ntconsult.desafio_java.reserva.controllers;
 
 import com.ntconsult.desafio_java.reserva.dtos.ReservaRequestDTO;
 import com.ntconsult.desafio_java.reserva.dtos.ReservaResponseDTO;
-import com.ntconsult.desafio_java.reserva.models.Reserva;
 import com.ntconsult.desafio_java.reserva.services.ReservaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

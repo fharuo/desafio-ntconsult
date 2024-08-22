@@ -1,6 +1,7 @@
 package com.ntconsult.desafio_java.reserva.services;
 
 import com.ntconsult.desafio_java.dtos.NotificationDTO;
+import com.ntconsult.desafio_java.hotel.repositories.HotelRepository;
 import com.ntconsult.desafio_java.notificacao.services.NotificacaoService;
 import com.ntconsult.desafio_java.quarto.repositories.QuartoRepository;
 import com.ntconsult.desafio_java.reserva.dtos.ReservaRequestDTO;
@@ -19,6 +20,8 @@ import java.util.Optional;
 @Service
 public class ReservaService {
 
+    private final HotelRepository hotelRepository;
+
     private final ReservaRepository reservaRepository;
 
     private final QuartoRepository quartoRepository;
@@ -32,6 +35,7 @@ public class ReservaService {
 
         if (disponivel) {
             Reserva reserva = new Reserva();
+            reserva.setHotel(hotelRepository.findById(dto.getHotelId()).orElseThrow(() -> new IllegalArgumentException("Hotel não encontrado")));
             reserva.setQuarto(quartoRepository.findById(dto.getQuartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto não encontrado")));
             reserva.setDataCheckin(dto.getDataCheckin());
             reserva.setDataCheckout(dto.getDataCheckout());
@@ -65,7 +69,7 @@ public class ReservaService {
             reserva.setStatus(statusCancelada);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CANCELAMENTO_RESERVA", statusCancelada.getDescricao(), LocalDateTime.now().toString());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CANCELAMENTO_RESERVA", "ENVIADA", LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;
@@ -85,7 +89,7 @@ public class ReservaService {
             reserva.setStatus(statusCheckin);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKIN_REALIZADO", statusCheckin.getDescricao(), LocalDateTime.now().toString());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKIN_REALIZADO", "ENVIADA", LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;
@@ -105,7 +109,7 @@ public class ReservaService {
             reserva.setStatus(statusCheckout);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKOUT_REALIZADO", statusCheckout.getDescricao(), LocalDateTime.now().toString());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKOUT_REALIZADO", "ENVIADA", LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;

@@ -10,6 +10,8 @@ public class ReservaResponseDTO {
 
     private Long reservaId;
 
+    private String hotel;
+
     private String quartoNumero;
 
     private LocalDate dataCheckin;
@@ -26,6 +28,7 @@ public class ReservaResponseDTO {
 
     public ReservaResponseDTO(Reserva reserva) {
         this.reservaId = reserva.getId();
+        this.hotel = reserva.getHotel().getNome();
         this.quartoNumero = reserva.getQuarto().getNumero();
         this.dataCheckin = reserva.getDataCheckin();
         this.dataCheckout = reserva.getDataCheckout();
