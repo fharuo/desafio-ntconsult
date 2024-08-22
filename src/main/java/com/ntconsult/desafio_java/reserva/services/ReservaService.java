@@ -4,6 +4,7 @@ import com.ntconsult.desafio_java.dtos.NotificationDTO;
 import com.ntconsult.desafio_java.notificacao.services.NotificacaoService;
 import com.ntconsult.desafio_java.quarto.repositories.QuartoRepository;
 import com.ntconsult.desafio_java.reserva.dtos.ReservaRequestDTO;
+import com.ntconsult.desafio_java.reserva.dtos.ReservaResponseDTO;
 import com.ntconsult.desafio_java.reserva.models.Reserva;
 import com.ntconsult.desafio_java.reserva.models.StatusReserva;
 import com.ntconsult.desafio_java.reserva.repositories.ReservaRepository;
@@ -26,7 +27,7 @@ public class ReservaService {
 
     private final NotificacaoService notificacaoService;
 
-    public Optional<Reserva> criarReserva(ReservaRequestDTO dto) {
+    public ReservaResponseDTO criarReserva(ReservaRequestDTO dto) {
         boolean disponivel = quartoRepository.isQuartoDisponivel(dto.getQuartoId(), dto.getDataCheckin(), dto.getDataCheckout());
 
         if (disponivel) {
@@ -35,6 +36,7 @@ public class ReservaService {
             reserva.setDataCheckin(dto.getDataCheckin());
             reserva.setDataCheckout(dto.getDataCheckout());
             reserva.setNomeCliente(dto.getNomeCliente());
+            reserva.setPax(dto.getPax());
             reserva.setContatoCliente(dto.getContatoCliente());
             reserva.setDetalhesPagamento(dto.getDetalhesPagamento());
 
@@ -43,13 +45,13 @@ public class ReservaService {
 
             Reserva reservaConfirmada = reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reservaConfirmada.getId(),"CONFIRMACAO_RESERVA", statusConfirmado.getDescricao(), LocalDateTime.now());
+            NotificationDTO notificationDTO = new NotificationDTO(reservaConfirmada.getId(), "CONFIRMACAO_RESERVA", "ENVIADA", LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
-            return Optional.of(reservaConfirmada);
-        } else {
-            return Optional.empty();
+            return new ReservaResponseDTO(reservaConfirmada);
         }
+
+        return null;
     }
 
     public boolean cancelarReserva(Long id) {
@@ -63,7 +65,7 @@ public class ReservaService {
             reserva.setStatus(statusCancelada);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CANCELAMENTO_RESERVA", statusCancelada.getDescricao(), LocalDateTime.now());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CANCELAMENTO_RESERVA", statusCancelada.getDescricao(), LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;
@@ -83,7 +85,7 @@ public class ReservaService {
             reserva.setStatus(statusCheckin);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKIN_REALIZADO", statusCheckin.getDescricao(), LocalDateTime.now());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKIN_REALIZADO", statusCheckin.getDescricao(), LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;
@@ -103,7 +105,7 @@ public class ReservaService {
             reserva.setStatus(statusCheckout);
             reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKOUT_REALIZADO", statusCheckout.getDescricao(), LocalDateTime.now());
+            NotificationDTO notificationDTO = new NotificationDTO(reserva.getId(), "CHECKOUT_REALIZADO", statusCheckout.getDescricao(), LocalDateTime.now().toString());
             notificacaoService.enviarNotificacao(notificationDTO);
 
             return true;

@@ -15,6 +15,8 @@ public class ReservaRequestDTO {
 
     private String nomeCliente;
 
+    private Long pax;
+
     private String contatoCliente;
 
     private String detalhesPagamento;

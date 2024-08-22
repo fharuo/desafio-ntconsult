@@ -17,20 +17,11 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<ReservaResponseDTO> criarReserva(@RequestBody ReservaRequestDTO reservaRequestDTO) {
-        Reserva reserva = reservaService.criarReserva(reservaRequestDTO).orElse(null);
+        ReservaResponseDTO responseDTO = reservaService.criarReserva(reservaRequestDTO);
 
-        if (reserva == null) {
+        if (responseDTO == null) {
             return ResponseEntity.status(409).build();
         }
-
-        ReservaResponseDTO responseDTO = new ReservaResponseDTO();
-        responseDTO.setReservaId(reserva.getId());
-        responseDTO.setQuartoId(reserva.getQuarto().getId());
-        responseDTO.setDataCheckin(reserva.getDataCheckin());
-        responseDTO.setDataCheckout(reserva.getDataCheckout());
-        responseDTO.setNomeCliente(reserva.getNomeCliente());
-        responseDTO.setContatoCliente(reserva.getContatoCliente());
-        responseDTO.setStatusReserva(reserva.getStatus().getDescricao());
 
         return ResponseEntity.ok(responseDTO);
     }

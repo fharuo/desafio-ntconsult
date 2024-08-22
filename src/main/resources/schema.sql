@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS reserva (
     data_checkin DATE NOT NULL,
     data_checkout DATE NOT NULL,
     nome_cliente VARCHAR(255) NOT NULL,
+    pax INT8 NOT NULL,
     contato_cliente VARCHAR(255) NOT NULL,
     detalhes_pagamento TEXT
 );

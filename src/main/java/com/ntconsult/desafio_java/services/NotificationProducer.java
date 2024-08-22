@@ -14,6 +14,6 @@ public class NotificationProducer {
     private RabbitTemplate rabbitTemplate;
 
     public void sendNotification(NotificationDTO notification) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, "notification.email", notification);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, "notification.email", notification.toString());
     }
 }

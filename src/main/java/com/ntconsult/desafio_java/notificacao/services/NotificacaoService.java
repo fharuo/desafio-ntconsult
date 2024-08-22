@@ -7,6 +7,8 @@ import com.ntconsult.desafio_java.notificacao.models.TipoNotificacao;
 import com.ntconsult.desafio_java.notificacao.repositories.NotificacaoRepository;
 import com.ntconsult.desafio_java.notificacao.repositories.StatusNotificacaoRepository;
 import com.ntconsult.desafio_java.notificacao.repositories.TipoNotificacaoRepository;
+import com.ntconsult.desafio_java.reserva.models.Reserva;
+import com.ntconsult.desafio_java.reserva.repositories.ReservaRepository;
 import com.ntconsult.desafio_java.services.NotificationProducer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class NotificacaoService {
 
     private final NotificacaoRepository notificacaoRepository;
+
+    private final ReservaRepository reservaRepository;
 
     private final StatusNotificacaoRepository statusNotificacaoRepository;
 
@@ -30,8 +34,11 @@ public class NotificacaoService {
         StatusNotificacao statusNotificacao = statusNotificacaoRepository.findByDescricao(notificationDTO.getStatusNotificacao())
                 .orElseThrow(() -> new IllegalArgumentException("Status de Notificação não encontrado"));
 
+        Reserva reserva = reservaRepository.findById(notificationDTO.getReservaId())
+                .orElseThrow(() -> new IllegalArgumentException("Status de Notificação não encontrado"));
+
         Notificacao notificacao = new Notificacao();
-        notificacao.setReserva(notificacao.getReserva());
+        notificacao.setReserva(reserva);
         notificacao.setTipo(tipoNotificacao);
         notificacao.setStatus(statusNotificacao);
 

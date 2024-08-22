@@ -13,9 +13,9 @@ public class NotificationDTO {
 
     private String statusNotificacao;
 
-    private LocalDateTime dataEnvio;
+    private String dataEnvio;
 
-    public NotificationDTO(Long reservaId, String tipoNotificacao, String statusNotificacao, LocalDateTime dataEnvio) {
+    public NotificationDTO(Long reservaId, String tipoNotificacao, String statusNotificacao, String dataEnvio) {
         this.reservaId = reservaId;
         this.tipoNotificacao = tipoNotificacao;
         this.statusNotificacao = statusNotificacao;

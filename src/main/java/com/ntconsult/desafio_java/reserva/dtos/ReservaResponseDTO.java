@@ -1,5 +1,6 @@
 package com.ntconsult.desafio_java.reserva.dtos;
 
+import com.ntconsult.desafio_java.reserva.models.Reserva;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ public class ReservaResponseDTO {
 
     private Long reservaId;
 
-    private Long quartoId;
+    private String quartoNumero;
 
     private LocalDate dataCheckin;
 
@@ -17,7 +18,20 @@ public class ReservaResponseDTO {
 
     private String nomeCliente;
 
+    private Long pax;
+
     private String contatoCliente;
 
     private String statusReserva;
+
+    public ReservaResponseDTO(Reserva reserva) {
+        this.reservaId = reserva.getId();
+        this.quartoNumero = reserva.getQuarto().getNumero();
+        this.dataCheckin = reserva.getDataCheckin();
+        this.dataCheckout = reserva.getDataCheckout();
+        this.nomeCliente = reserva.getNomeCliente();
+        this.pax = reserva.getPax();
+        this.contatoCliente = reserva.getContatoCliente();
+        this.statusReserva = reserva.getStatus().getDescricao();
+    }
 }

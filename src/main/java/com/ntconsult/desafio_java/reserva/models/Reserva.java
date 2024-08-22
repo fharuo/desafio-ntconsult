@@ -21,21 +21,22 @@ public class Reserva {
 
     private String nomeCliente;
 
+    private Long pax;
+
     private String contatoCliente;
 
-    @Lob
     private String detalhesPagamento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "quarto_id", nullable = false)
+    @JoinColumn(name = "quarto_id")
     private Quarto quarto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id", nullable = false)
+    @JoinColumn(name = "status_id")
     private StatusReserva status;
 }
 
