@@ -2,10 +2,11 @@ package com.ntconsult.desafio_java.dtos;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class NotificationDTO {
+public class NotificationDTO implements Serializable {
 
     private Long reservaId;
 
