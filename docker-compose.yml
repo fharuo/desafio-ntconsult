@@ -1,6 +1,23 @@
 version: '3.1'
 
 services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - rabbitmq_go_net
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    networks:
+      - rabbitmq_go_net
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
@@ -41,8 +58,9 @@ networks:
   rabbitmq_go_net:
     driver: bridge
 
-
 volumes:
+  prometheus_data:
+  grafana_data:
   postgres:
   redis:
   rabbitmq:

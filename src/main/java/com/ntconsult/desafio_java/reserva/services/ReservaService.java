@@ -1,6 +1,7 @@
 package com.ntconsult.desafio_java.reserva.services;
 
 import com.ntconsult.desafio_java.dtos.NotificationDTO;
+import com.ntconsult.desafio_java.exceptions.NotFoundException;
 import com.ntconsult.desafio_java.hotel.repositories.HotelRepository;
 import com.ntconsult.desafio_java.notificacao.services.NotificacaoService;
 import com.ntconsult.desafio_java.quarto.repositories.QuartoRepository;
@@ -37,8 +38,8 @@ public class ReservaService {
         reservaValidador.executar(dto);
 
         Reserva reserva = new Reserva();
-        reserva.setHotel(hotelRepository.findById(dto.getHotelId()).orElseThrow(() -> new IllegalArgumentException("Hotel não encontrado")));
-        reserva.setQuarto(quartoRepository.findById(dto.getQuartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto não encontrado")));
+        reserva.setHotel(hotelRepository.findById(dto.getHotelId()).get());
+        reserva.setQuarto(quartoRepository.findById(dto.getQuartoId()).get());
         reserva.setDataCheckin(dto.getDataCheckin());
         reserva.setDataCheckout(dto.getDataCheckout());
         reserva.setNomeCliente(dto.getNomeCliente());
@@ -46,7 +47,7 @@ public class ReservaService {
         reserva.setContatoCliente(dto.getContatoCliente());
         reserva.setDetalhesPagamento(dto.getDetalhesPagamento());
 
-        StatusReserva statusConfirmado = statusReservaRepository.findByDescricao("CONFIRMADA").orElseThrow(() -> new IllegalArgumentException("Status de reserva não encontrado"));
+        StatusReserva statusConfirmado = statusReservaRepository.findByDescricao("CONFIRMADA").orElseThrow(() -> new NotFoundException("Status de reserva não encontrado"));
         reserva.setStatus(statusConfirmado);
 
         Reserva reservaConfirmada = reservaRepository.save(reserva);
@@ -63,7 +64,7 @@ public class ReservaService {
         if (reservaOptional.isPresent()) {
             Reserva reserva = reservaOptional.get();
             StatusReserva statusCancelada = statusReservaRepository.findByDescricao("CANCELADA")
-                    .orElseThrow(() -> new IllegalArgumentException("Status de reserva 'CANCELADA' não encontrado"));
+                    .orElseThrow(() -> new NotFoundException("Status de reserva 'CANCELADA' não encontrado"));
 
             reserva.setStatus(statusCancelada);
             reservaRepository.save(reserva);
@@ -83,7 +84,7 @@ public class ReservaService {
         if (reservaOptional.isPresent()) {
             Reserva reserva = reservaOptional.get();
             StatusReserva statusCheckin = statusReservaRepository.findByDescricao("CHECKED_IN")
-                    .orElseThrow(() -> new IllegalArgumentException("Status de reserva 'CHECKED_IN' não encontrado"));
+                    .orElseThrow(() -> new NotFoundException("Status de reserva 'CHECKED_IN' não encontrado"));
 
             reserva.setStatus(statusCheckin);
             reservaRepository.save(reserva);
@@ -103,7 +104,7 @@ public class ReservaService {
         if (reservaOptional.isPresent()) {
             Reserva reserva = reservaOptional.get();
             StatusReserva statusCheckout = statusReservaRepository.findByDescricao("CHECKED_OUT")
-                    .orElseThrow(() -> new IllegalArgumentException("Status de reserva 'CHECKED_OUT' não encontrado"));
+                    .orElseThrow(() -> new NotFoundException("Status de reserva 'CHECKED_OUT' não encontrado"));
 
             reserva.setStatus(statusCheckout);
             reservaRepository.save(reserva);

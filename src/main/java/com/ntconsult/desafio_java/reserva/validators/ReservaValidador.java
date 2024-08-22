@@ -2,6 +2,8 @@ package com.ntconsult.desafio_java.reserva.validators;
 
 import com.ntconsult.desafio_java.exceptions.FieldMessage;
 import com.ntconsult.desafio_java.exceptions.InvalidRequestException;
+import com.ntconsult.desafio_java.exceptions.NotFoundException;
+import com.ntconsult.desafio_java.hotel.repositories.HotelRepository;
 import com.ntconsult.desafio_java.quarto.models.Quarto;
 import com.ntconsult.desafio_java.quarto.repositories.QuartoRepository;
 import com.ntconsult.desafio_java.reserva.dtos.ReservaRequestDTO;
@@ -17,6 +19,8 @@ public class ReservaValidador {
 
     private final QuartoRepository quartoRepository;
 
+    private final HotelRepository hotelRepository;
+
     public void executar(ReservaRequestDTO dto) {
         Map<String, String> camposErros = new HashMap<>();
         boolean insercaoValida = true;
@@ -30,10 +34,22 @@ public class ReservaValidador {
         }
 
         Quarto quarto = quartoRepository.findById(dto.getQuartoId())
-                .orElseThrow(() -> new IllegalArgumentException("Quarto não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Quarto não encontrado"));
 
         if (dto.getPax() > quarto.getCapacidade()) {
             camposErros.put("pax", "Quarto comporta no máximo " + quarto.getCapacidade() + " pessoas");
+            insercaoValida = false;
+        }
+
+        boolean quartoExiste = quartoRepository.existsById(dto.getQuartoId());
+        if (!quartoExiste) {
+            camposErros.put("quartoId", "Quarto não encontrado");
+            insercaoValida = false;
+        }
+
+        boolean hotelExiste = hotelRepository.existsById(dto.getHotelId());
+        if (!hotelExiste) {
+            camposErros.put("hotelId", "Hotel não encontrado");
             insercaoValida = false;
         }
 

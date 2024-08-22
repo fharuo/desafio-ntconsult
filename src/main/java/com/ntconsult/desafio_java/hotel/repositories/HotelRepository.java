@@ -23,4 +23,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "HAVING COUNT(q.id) >= :numeroQuartos", nativeQuery = true)
     List<Hotel> findByCriteria(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes);
 
+    boolean existsById(Long id);
+
 }

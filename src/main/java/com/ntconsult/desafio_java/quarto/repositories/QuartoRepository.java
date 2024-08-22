@@ -14,6 +14,8 @@ public interface QuartoRepository extends JpaRepository<Quarto, Long> {
 
     List<Quarto> findByHotelId(Long hotelId);
 
+    boolean existsById(Long id);
+
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN false ELSE true END FROM Reserva r WHERE r.quarto.id = :quartoId AND " +
             "(r.dataCheckin <= :dataCheckout AND r.dataCheckout >= :dataCheckin)")
     boolean isQuartoDisponivel(Long quartoId, LocalDate dataCheckin, LocalDate dataCheckout);
