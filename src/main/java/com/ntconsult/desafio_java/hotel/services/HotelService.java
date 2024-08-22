@@ -21,7 +21,9 @@ public class HotelService {
         return hoteis.stream().map(HotelDTO::new).toList();
     }
 
-    public List<Hotel> pesquisarHoteis(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes) {
-        return hotelRepository.findByCriteria(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
+    public List<HotelDTO> pesquisarHoteis(String localizacao, LocalDate dataCheckin, LocalDate dataCheckout, int numeroQuartos, int numeroHospedes) {
+        List<Hotel> hoteis = hotelRepository.findByCriteria(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
+
+        return hoteis.stream().map(HotelDTO::new).toList();
     }
 }

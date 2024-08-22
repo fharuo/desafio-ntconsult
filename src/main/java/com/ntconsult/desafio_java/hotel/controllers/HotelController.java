@@ -3,9 +3,12 @@ package com.ntconsult.desafio_java.hotel.controllers;
 import com.ntconsult.desafio_java.hotel.dtos.ComparacaoDTO;
 import com.ntconsult.desafio_java.hotel.dtos.ComparacaoPrecoDTO;
 import com.ntconsult.desafio_java.hotel.dtos.HotelDTO;
-import com.ntconsult.desafio_java.hotel.models.Hotel;
 import com.ntconsult.desafio_java.hotel.services.HotelComparisonService;
 import com.ntconsult.desafio_java.hotel.services.HotelService;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,21 +36,21 @@ public class HotelController {
     }
 
     @GetMapping("/pesquisar")
-    public ResponseEntity<List<Hotel>> pesquisarHoteis(
-            @RequestParam(required = false) String localizacao,
-            @RequestParam(required = false) LocalDate dataCheckin,
-            @RequestParam(required = false) LocalDate dataCheckout,
-            @RequestParam(required = false) Integer numeroQuartos,
-            @RequestParam(required = false) Integer numeroHospedes) {
+    public ResponseEntity<List<HotelDTO>> pesquisarHoteis(
+            @RequestParam @NotNull String localizacao,
+            @RequestParam @NotNull @FutureOrPresent LocalDate dataCheckin,
+            @RequestParam @NotNull @FutureOrPresent LocalDate dataCheckout,
+            @RequestParam @NotNull @Positive(message = "Insira um número maior que zero") Integer numeroQuartos,
+            @RequestParam @NotNull @Positive(message = "Insira um número maior que zero") Integer numeroHospedes) {
 
-        List<Hotel> hoteis = hotelService.pesquisarHoteis(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
+        List<HotelDTO> hoteis = hotelService.pesquisarHoteis(localizacao, dataCheckin, dataCheckout, numeroQuartos, numeroHospedes);
         return ResponseEntity.ok(hoteis);
     }
 
     @GetMapping("/comparar/avaliacao")
     public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorAvaliacao(
-            @RequestParam(required = false) Long primeiroHotelId,
-            @RequestParam(required = false) Long segundoHotelId) {
+            @RequestParam Long primeiroHotelId,
+            @RequestParam Long segundoHotelId) {
 
         List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorAvaliacao(primeiroHotelId, segundoHotelId);
 
@@ -56,8 +59,8 @@ public class HotelController {
 
     @GetMapping("/comparar/localizacao")
     public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorLocalizacao(
-            @RequestParam(required = false) Long primeiroHotelId,
-            @RequestParam(required = false) Long segundoHotelId) {
+            @RequestParam Long primeiroHotelId,
+            @RequestParam Long segundoHotelId) {
 
         List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorLocalizacao(primeiroHotelId, segundoHotelId);
 
@@ -66,8 +69,8 @@ public class HotelController {
 
     @GetMapping("/comparar/comodidades")
     public ResponseEntity<List<ComparacaoDTO>> compararHoteisPorComodidades(
-            @RequestParam(required = false) Long primeiroHotelId,
-            @RequestParam(required = false) Long segundoHotelId) {
+            @RequestParam Long primeiroHotelId,
+            @RequestParam Long segundoHotelId) {
 
         List<ComparacaoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorComodidades(primeiroHotelId, segundoHotelId);
 
@@ -76,8 +79,8 @@ public class HotelController {
 
     @GetMapping("/comparar/preco")
     public ResponseEntity<List<ComparacaoPrecoDTO>> compararHoteisPorPreco(
-            @RequestParam(required = false) Long primeiroHotelId,
-            @RequestParam(required = false) Long segundoHotelId) {
+            @RequestParam Long primeiroHotelId,
+            @RequestParam Long segundoHotelId) {
 
         List<ComparacaoPrecoDTO> hoteisComparados = hotelComparisonService.compararHoteisPorPreco(primeiroHotelId, segundoHotelId);
 
