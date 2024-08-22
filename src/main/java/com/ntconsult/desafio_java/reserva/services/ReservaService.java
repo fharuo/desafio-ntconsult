@@ -10,6 +10,7 @@ import com.ntconsult.desafio_java.reserva.models.Reserva;
 import com.ntconsult.desafio_java.reserva.models.StatusReserva;
 import com.ntconsult.desafio_java.reserva.repositories.ReservaRepository;
 import com.ntconsult.desafio_java.reserva.repositories.StatusReservaRepository;
+import com.ntconsult.desafio_java.reserva.validators.ReservaValidador;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,34 +29,32 @@ public class ReservaService {
 
     private final StatusReservaRepository statusReservaRepository;
 
+    private final ReservaValidador reservaValidador;
+
     private final NotificacaoService notificacaoService;
 
     public ReservaResponseDTO criarReserva(ReservaRequestDTO dto) {
-        boolean disponivel = quartoRepository.isQuartoDisponivel(dto.getQuartoId(), dto.getDataCheckin(), dto.getDataCheckout());
+        reservaValidador.executar(dto);
 
-        if (disponivel) {
-            Reserva reserva = new Reserva();
-            reserva.setHotel(hotelRepository.findById(dto.getHotelId()).orElseThrow(() -> new IllegalArgumentException("Hotel não encontrado")));
-            reserva.setQuarto(quartoRepository.findById(dto.getQuartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto não encontrado")));
-            reserva.setDataCheckin(dto.getDataCheckin());
-            reserva.setDataCheckout(dto.getDataCheckout());
-            reserva.setNomeCliente(dto.getNomeCliente());
-            reserva.setPax(dto.getPax());
-            reserva.setContatoCliente(dto.getContatoCliente());
-            reserva.setDetalhesPagamento(dto.getDetalhesPagamento());
+        Reserva reserva = new Reserva();
+        reserva.setHotel(hotelRepository.findById(dto.getHotelId()).orElseThrow(() -> new IllegalArgumentException("Hotel não encontrado")));
+        reserva.setQuarto(quartoRepository.findById(dto.getQuartoId()).orElseThrow(() -> new IllegalArgumentException("Quarto não encontrado")));
+        reserva.setDataCheckin(dto.getDataCheckin());
+        reserva.setDataCheckout(dto.getDataCheckout());
+        reserva.setNomeCliente(dto.getNomeCliente());
+        reserva.setPax(dto.getPax());
+        reserva.setContatoCliente(dto.getContatoCliente());
+        reserva.setDetalhesPagamento(dto.getDetalhesPagamento());
 
-            StatusReserva statusConfirmado = statusReservaRepository.findByDescricao("CONFIRMADA").orElseThrow(() -> new IllegalArgumentException("Status de reserva não encontrado"));
-            reserva.setStatus(statusConfirmado);
+        StatusReserva statusConfirmado = statusReservaRepository.findByDescricao("CONFIRMADA").orElseThrow(() -> new IllegalArgumentException("Status de reserva não encontrado"));
+        reserva.setStatus(statusConfirmado);
 
-            Reserva reservaConfirmada = reservaRepository.save(reserva);
+        Reserva reservaConfirmada = reservaRepository.save(reserva);
 
-            NotificationDTO notificationDTO = new NotificationDTO(reservaConfirmada.getId(), "CONFIRMACAO_RESERVA", "ENVIADA", LocalDateTime.now().toString());
-            notificacaoService.enviarNotificacao(notificationDTO);
+        NotificationDTO notificationDTO = new NotificationDTO(reservaConfirmada.getId(), "CONFIRMACAO_RESERVA", "ENVIADA", LocalDateTime.now().toString());
+        notificacaoService.enviarNotificacao(notificationDTO);
 
-            return new ReservaResponseDTO(reservaConfirmada);
-        }
-
-        return null;
+        return new ReservaResponseDTO(reservaConfirmada);
     }
 
     public boolean cancelarReserva(Long id) {
