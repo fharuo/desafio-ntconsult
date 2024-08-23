@@ -15,24 +15,6 @@ git clone https://github.com/fharuo/desafio-ntconsult.git
 cd nome-do-repositorio
 ```
 
-## Build da Aplicação
-1. **Certifique-se de que você está usando a JDK 21:**
-```
-java -version
-```
-  A saída deve mostrar a versão 21.
-
-2. **Compile o projeto:**
-```
-mvn clean install
-```
-
-3. **Executar a aplicação:**
-   Após compilar, você pode rodar a aplicação diretamente pelo Maevn:
-```
-mvn spring-boot:run
-```
-
 ## Executar containers com Docker Compose
 O projeto está configurado para utilizar Docker Compose para orquestrar múltiplos serviços:
 1. **Inicie os serviços Docker:**
@@ -51,6 +33,39 @@ docker-compose up -d
    - **PostgreSQL:** Está acessível internamente no docker na porta 5432
      - **Login:** root
      - **Senha:** root
+    
+3. **Crie um banco de dados**
+A aplicação está configurada para se conectar a base dados *ntconsult*. Para isso, acesse o terminal da sua imagem do PostgreSQL e digite os seguintes comandos:
+
+```
+psql
+```
+```
+create database ntconsult;
+```
+
+> [!NOTE]
+> Ao reiniciar a aplicação, uma nova instancia do banco de dados deve ser gerada.
+
+
+## Build da Aplicação
+1. **Certifique-se de que você está usando a JDK 21:**
+```
+java -version
+```
+  A saída deve mostrar a versão 21.
+
+2. **Compile o projeto:**
+```
+mvn clean install
+```
+
+3. **Executar a aplicação:**
+
+   Após compilar, você pode rodar a aplicação diretamente pelo Maevn:
+```
+mvn spring-boot:run
+```
        
 ## Testes
 Para rodar os testes unitários:
