@@ -2,10 +2,12 @@ package com.ntconsult.desafio_java.reserva.dtos;
 
 import com.ntconsult.desafio_java.reserva.models.Reserva;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 public class ReservaResponseDTO {
 
     private Long reservaId;
