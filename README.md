@@ -12,7 +12,7 @@ Este é um sistema de reservas de hotéis desenvolvido em Java com o framework S
 ### Clone o repositório
 ```
 git clone https://github.com/fharuo/desafio-ntconsult.git
-cd nome-do-repositorio
+cd desafio-ntconsult
 ```
 
 ## Executar containers com Docker Compose
@@ -39,8 +39,6 @@ A aplicação está configurada para se conectar a base dados *ntconsult*. Para 
 
 ```
 psql
-```
-```
 create database ntconsult;
 ```
 
